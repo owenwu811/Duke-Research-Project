@@ -4,16 +4,20 @@ import peewee
 from peewee import *
 import sqlCredentials
 
+#performing database population using peewee orm mapping
+
+#database connection string
 db = MySQLDatabase(sqlCredentials.name, user=sqlCredentials.user, passwd=sqlCredentials.password, port=sqlCredentials.port)
 
-
+#BaseModel is a subclass of Model class. Model class comes from the PeeWee library. Class is intended to serve as a base class for all other models defined later.
 class BaseModel(Model):
     class Meta:
-        database = db
+        database = db    #all model classes derived from the BaseModel subclass will use the same database connection as specified in line 10. Ensures all models share the same database connection to operate on the same database.
 
-
+#Publications class is a subclass of the BaseModel Class. Represents a database for storing publication info.
 class Publications(BaseModel):
-    authid = IntegerField(db_column='authid', null=False)
+    #each variable is a column in the database
+    authid = IntegerField(db_column='authid', null=False) #authid is a class attribute, so it belongs to the Publications class and is shared amoungst all instances in the class and can be accessed by using the same class name.
     authname = TextField(db_column='authname', null=False)
     title = TextField(db_column='title', null=False, primary_key=True)
     authors = TextField(db_column='authors', null=False)
@@ -22,7 +26,7 @@ class Publications(BaseModel):
     source = TextField(db_column='source', null=False)
     raw = TextField(db_column='raw', null=False)
 
-
+#Citations class is a subclass of the BaseModel Class
 class Citations(BaseModel):
     title = TextField(db_column='title', null=False)
     year = IntegerField(db_column='year', null=False)
@@ -141,7 +145,7 @@ def populate_CVs(file_name):
             print(e)
             print("Interrupted at index: " + str(index))
 
-
+#script entrypoint that connects to the database, calls data population functions to populate the tables, and closes the database connection with db.close()
 def main():
     db.connect()
 
