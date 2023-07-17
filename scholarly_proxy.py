@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+#the beautifulsoup library is used for parsing HTML and XML documents
 from bs4 import BeautifulSoup
 
 import arrow
@@ -23,6 +24,7 @@ from tqdm import tqdm
 
 _GOOGLEID = hashlib.md5(str(random.random()).encode('utf-8')).hexdigest()[:16]
 _COOKIES = {'GSP': 'ID={0}:CF=4'.format(_GOOGLEID)}
+#These lines generate a random Google ID, which is used as a cookie for some HTTP requests.
 _HEADERS = {
     'accept-language': 'en-US,en',
     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/41.0.2272.76 Chrome/41.0.2272.76 Safari/537.36',
@@ -54,7 +56,7 @@ proxies = crawlera_proxies.proxies
 def supress_warnings():
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-
+#A function to disable warnings related to insecure requests made using the urllib3 library.
 def _get_page(pagerequest):
     global _SESSION
 
@@ -69,7 +71,7 @@ def _get_page(pagerequest):
         tqdm.write("Encountered status code: " + str(resp.status_code))
         return _get_page(pagerequest)
 
-
+#This function sends an HTTP GET request to the specified URL (pagerequest) using the _SESSION object. It returns the response text if the status code is 200 (OK), otherwise, it retries the request recursively.
 def _get_soup(pagerequest):
     """Return the BeautifulSoup for a page on scholar.google.com"""
     html = _get_page(pagerequest)
