@@ -265,7 +265,7 @@ class Author(object):
         return self
 
     def __str__(self):
-        return pprint.pformat(self.__dict__)
+        return print.pformat(self.__dict__)
 
 
 def search_pubs_query(query):
